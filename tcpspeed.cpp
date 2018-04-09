@@ -246,10 +246,11 @@ int main(int argc, char **argv)
 		long unsigned int start_loop_ticks = 0;
 		long unsigned int end_loop_ticks = 0;
 		long unsigned int elapsed_loop_ticks = 0;
-		__int64 total_elapsed_ticks = 0;
-		__int64 total_bytes_received = 0;
-		__int64 last_reported_at_ticks = 0;
-		__int64 last_reported_total_bytes_received = 0;
+
+		long long unsigned int total_elapsed_ticks = 0;
+		long long unsigned int total_bytes_received = 0;
+		long long unsigned int last_reported_at_ticks = 0;
+		long long unsigned int last_reported_total_bytes_received = 0;
 
 		double record_bps = 0;
 		long unsigned int temp_bytes_received = 0;
@@ -284,7 +285,7 @@ int main(int argc, char **argv)
 
 			if (total_elapsed_ticks >= last_reported_at_ticks + 1000)
 			{
-				__int64 bytes_sent_received_between_reports = total_bytes_received - last_reported_total_bytes_received;
+				long long unsigned int bytes_sent_received_between_reports = total_bytes_received - last_reported_total_bytes_received;
 
 				double bytes_per_second = static_cast<double>(bytes_sent_received_between_reports) / ((static_cast<double>(total_elapsed_ticks) - static_cast<double>(last_reported_at_ticks)) / 1000.0);
 
@@ -296,6 +297,16 @@ int main(int argc, char **argv)
 
 				static const double mbits_factor = 8.0 / (1024.0 * 1024);
 				cout << "  " << bytes_per_second * mbits_factor << " Mbit/s, Record: " << record_bps * mbits_factor << " Mbit/s" << endl;
+
+				if (0 == bytes_per_second)
+				{
+					if (!stop)
+					{
+						cout << "  Connection throttled to death." << endl;
+						cleanup();
+						return 7;
+					}
+				}
 			}
 		}
 	}
