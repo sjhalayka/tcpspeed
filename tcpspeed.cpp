@@ -135,6 +135,8 @@ int main(int argc, char **argv)
 	}
 	if (talk_mode == mode)
 	{
+		cout << "  Talking on TCP port " << port_number << " - CTRL+C to exit." << endl;
+
 		struct sockaddr_in their_addr;
 		struct hostent *he = 0;
 		he = gethostbyname(target_host_string.c_str());
@@ -155,8 +157,6 @@ int main(int argc, char **argv)
 			cleanup();
 			return 3;
 		}
-		else
-			cout << "socket ok" << endl;
 
 		if (SOCKET_ERROR == connect(tcp_socket, (struct sockaddr *)&their_addr, sizeof(struct sockaddr))) // (tcp_socket = socket(AF_INET, SOCK_STREAM, 0)))
 		{
@@ -164,23 +164,26 @@ int main(int argc, char **argv)
 			cleanup();
 			return 3;
 		}
-		else
-			cout << "connect ok" << endl;
 
-		cout << "  Sending on TCP port " << port_number << " - CTRL+C to exit." << endl;
-		
 		while (!stop)
 		{
 			if (SOCKET_ERROR == (send(tcp_socket, tx_buf, tx_buf_size, 0)))
 			{
 				if (!stop)
 					cout << "  send error " << WSAGetLastError() << endl;
+
 				break;
 			}
 		}
 	}
 	else if (listen_mode == mode)
 	{
+		// https://msdn.microsoft.com/en-us/library/windows/desktop/ms737593(v=vs.85).aspx
+		// https://msdn.microsoft.com/en-us/library/windows/desktop/ms737591(v=vs.85).aspx
+		// https://msdn.microsoft.com/en-us/library/windows/desktop/ms741394(v=vs.85).aspx
+		//
+		cout << "  Listening on TCP port " << port_number << " - CTRL+C to exit." << endl;
+
 		struct sockaddr_in my_addr;
 		int sock_addr_len = sizeof(struct sockaddr);
 		my_addr.sin_family = AF_INET;
@@ -194,8 +197,6 @@ int main(int argc, char **argv)
 			cleanup();
 			return 4;
 		}
-		else
-			cout << "socket ok" << endl;
 
 		if (SOCKET_ERROR == bind(tcp_socket, (struct sockaddr *) &my_addr, sizeof(struct sockaddr)))
 		{
@@ -203,8 +204,6 @@ int main(int argc, char **argv)
 			cleanup();
 			return 5;
 		}
-		else
-			cout << "bind ok" << endl;
 
 		if (SOCKET_ERROR == listen(tcp_socket, 0))
 		{
@@ -212,8 +211,6 @@ int main(int argc, char **argv)
 			cleanup();
 			return 6;
 		}
-		else
-			cout << "listen ok" << endl;
 
 		SOCKET accept_socket = INVALID_SOCKET;
 
@@ -223,14 +220,6 @@ int main(int argc, char **argv)
 			cleanup();
 			return 7;
 		}
-		else
-			cout << "accept ok" << endl;
-
-		// https://msdn.microsoft.com/en-us/library/windows/desktop/ms737593(v=vs.85).aspx
-		// https://msdn.microsoft.com/en-us/library/windows/desktop/ms737591(v=vs.85).aspx
-		// https://msdn.microsoft.com/en-us/library/windows/desktop/ms741394(v=vs.85).aspx
-		//
-		cout << "  Listening on TCP port " << port_number << " - CTRL+C to exit." << endl;
 
 		long unsigned int start_loop_ticks = 0;
 		long unsigned int end_loop_ticks = 0;
