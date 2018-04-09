@@ -27,7 +27,7 @@ void print_usage(void)
 	cout << "    ie:" << endl;
 	cout << "      Listen mode: tcpspeed 1920" << endl;
 	cout << "      Talk mode:   tcpspeed www 342" << endl;
-	cout << "      Talk mode:   tcpspeed 10.200.67.1 950" << endl;
+	cout << "      Talk mode:   tcpspeed 127.0.0.1 950" << endl;
 	cout << endl;
 }
 
