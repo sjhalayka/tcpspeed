@@ -186,7 +186,7 @@ int main(int argc, char **argv)
 
 		if (SOCKET_ERROR == connect(tcp_socket, (struct sockaddr *)&their_addr, sizeof(struct sockaddr))) // (tcp_socket = socket(AF_INET, SOCK_STREAM, 0)))
 		{
-			cout << "  connect error." << endl;
+			cout << "  Connect error." << endl;
 			cleanup();
 			return 3;
 		}
@@ -196,7 +196,7 @@ int main(int argc, char **argv)
 			if (SOCKET_ERROR == (send(tcp_socket, tx_buf, tx_buf_size, 0)))
 			{
 				if (!stop)
-					cout << "  send error " << WSAGetLastError() << endl;
+					cout << "  Send error." << endl;
 
 				break;
 			}
@@ -233,7 +233,7 @@ int main(int argc, char **argv)
 
 		if (SOCKET_ERROR == listen(tcp_socket, 0))
 		{
-			cout << "  listen error." << endl;
+			cout << "  Listen error." << endl;
 			cleanup();
 			return 6;
 		}
@@ -242,7 +242,7 @@ int main(int argc, char **argv)
 
 		if (INVALID_SOCKET == (accept_socket = accept(tcp_socket, (struct sockaddr *) &my_addr, &sock_addr_len)))
 		{
-			cout << "  accept error." << endl;
+			cout << "  Accept error." << endl;
 			cleanup();
 			return 7;
 		}
