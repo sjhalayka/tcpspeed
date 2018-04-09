@@ -30,6 +30,7 @@ void print_usage(void)
 	cout << "      Talk mode:   tcpspeed 10.200.67.1 950" << endl;
 	cout << endl;
 }
+
 bool verify_port(const string &port_string, unsigned long int &port_number)
 {
 	for (size_t i = 0; i < port_string.length(); i++)
@@ -54,6 +55,7 @@ bool verify_port(const string &port_string, unsigned long int &port_number)
 	
 	return true;
 }
+
 bool init_winsock(void)
 {
 	WSADATA wsa_data;
