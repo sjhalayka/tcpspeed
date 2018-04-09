@@ -10,9 +10,11 @@ using std::endl;
 using std::string;
 using std::istringstream;
 using std::ios;
+
 bool stop = false;
 SOCKET tcp_socket = INVALID_SOCKET;
 enum program_mode { talk_mode, listen_mode };
+
 void print_usage(void)
 {
 	cout << "  USAGE:" << endl;
@@ -39,38 +41,46 @@ bool verify_port(const string &port_string, unsigned long int &port_number)
 			return false;
 		}
 	}
+
 	istringstream iss(port_string);
 	iss >> port_number;
+	
 	if (port_string.length() > 5 || port_number > 65535 || port_number == 0)
 	{
 		cout << "  Invalid port: " << port_string << endl;
 		cout << "  Port must be in the range of 1-65535" << endl;
 		return false;
 	}
+	
 	return true;
 }
 bool init_winsock(void)
 {
 	WSADATA wsa_data;
 	WORD ver_requested = MAKEWORD(2, 2);
+
 	if (WSAStartup(ver_requested, &wsa_data))
 	{
 		cout << "Could not initialize Winsock 2.2.";
 		return false;
 	}
+
 	if (LOBYTE(wsa_data.wVersion) != 2 || HIBYTE(wsa_data.wVersion) != 2)
 	{
 		cout << "Required version of Winsock (2.2) not available.";
 		return false;
 	}
+
 	return true;
 }
+
 BOOL console_control_handler(DWORD control_type)
 {
 	stop = true;
 	closesocket(tcp_socket);
 	return TRUE;
 }
+
 bool init_options(const int &argc, char **argv, enum program_mode &mode, string &target_host_string, long unsigned int &port_number)
 {
 	if (!SetConsoleCtrlHandler((PHANDLER_ROUTINE)console_control_handler, TRUE))
@@ -78,9 +88,12 @@ bool init_options(const int &argc, char **argv, enum program_mode &mode, string 
 		cout << "  Could not add console control handler." << endl;
 		return false;
 	}
+
 	if (!init_winsock())
 		return false;
+	
 	string port_string = "";
+	
 	if (2 == argc)
 	{
 		mode = listen_mode;
@@ -97,8 +110,10 @@ bool init_options(const int &argc, char **argv, enum program_mode &mode, string 
 		print_usage();
 		return false;
 	}
+	
 	cout.setf(ios::fixed, ios::floatfield);
 	cout.precision(2);
+	
 	return verify_port(port_string, port_number);
 }
 void cleanup(void)
@@ -109,17 +124,21 @@ void cleanup(void)
 		cout.flush();
 		cout << endl << "  Stopping." << endl;
 	}
+
 	// if the socket is still open, close it
 	if (INVALID_SOCKET != tcp_socket)
 		closesocket(tcp_socket);
+
 	// shut down winsock
 	WSACleanup();
+
 	// remove the console control handler
 	SetConsoleCtrlHandler((PHANDLER_ROUTINE)console_control_handler, FALSE);
 }
 int main(int argc, char **argv)
 {
 	cout << endl << "tcpspeed 1.1 - TCP speed tester" << endl << "Copyright 2018, Shawn Halayka" << endl << endl;
+
 	program_mode mode = listen_mode;
 	string target_host_string = "";
 	long unsigned int port_number = 0;
@@ -127,25 +146,28 @@ int main(int argc, char **argv)
 	char tx_buf[1450];
 	const long unsigned int rx_buf_size = 8196;
 	char rx_buf[8196];
+
 	// initialize winsock and all of the program's options
 	if (!init_options(argc, argv, mode, target_host_string, port_number))
 	{
 		cleanup();
 		return 1;
 	}
+
 	if (talk_mode == mode)
 	{
 		cout << "  Talking on TCP port " << port_number << " - CTRL+C to exit." << endl;
 
 		struct sockaddr_in their_addr;
-		struct hostent *he = 0;
-		he = gethostbyname(target_host_string.c_str());
+		struct hostent *he = gethostbyname(target_host_string.c_str());
+		
 		if (NULL == he)
 		{
 			cout << "  Could not resolve target host." << endl;
 			cleanup();
 			return 2;
 		}
+
 		their_addr.sin_family = AF_INET;
 		their_addr.sin_port = htons((unsigned short int)port_number);
 		their_addr.sin_addr = *((struct in_addr *)he->h_addr);
