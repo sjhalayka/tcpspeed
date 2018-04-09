@@ -262,7 +262,7 @@ int main(int argc, char **argv)
 			{
 				if (!stop)
 				{
-					cout << "  recv error." << endl;
+					cout << "  Receive error." << endl;
 					cleanup();
 					return 6;
 				}
