@@ -184,7 +184,7 @@ int main(int argc, char **argv)
 			return 3;
 		}
 
-		if (SOCKET_ERROR == connect(tcp_socket, (struct sockaddr *)&their_addr, sizeof(struct sockaddr))) // (tcp_socket = socket(AF_INET, SOCK_STREAM, 0)))
+		if (SOCKET_ERROR == connect(tcp_socket, (struct sockaddr *)&their_addr, sizeof(struct sockaddr)))
 		{
 			cout << "  Connect error." << endl;
 			cleanup();
