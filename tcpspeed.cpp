@@ -118,6 +118,7 @@ bool init_options(const int &argc, char **argv, enum program_mode &mode, string 
 	
 	return verify_port(port_string, port_number);
 }
+
 void cleanup(void)
 {
 	// if the program was aborted, flush cout and print a final goodbye
@@ -137,6 +138,7 @@ void cleanup(void)
 	// remove the console control handler
 	SetConsoleCtrlHandler((PHANDLER_ROUTINE)console_control_handler, FALSE);
 }
+
 int main(int argc, char **argv)
 {
 	cout << endl << "tcpspeed 1.1 - TCP speed tester" << endl << "Copyright 2018, Shawn Halayka" << endl << endl;
