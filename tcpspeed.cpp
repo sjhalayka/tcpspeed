@@ -204,10 +204,6 @@ int main(int argc, char **argv)
 	}
 	else if (listen_mode == mode)
 	{
-		// https://msdn.microsoft.com/en-us/library/windows/desktop/ms737593(v=vs.85).aspx
-		// https://msdn.microsoft.com/en-us/library/windows/desktop/ms737591(v=vs.85).aspx
-		// https://msdn.microsoft.com/en-us/library/windows/desktop/ms741394(v=vs.85).aspx
-		//
 		cout << "  Listening on TCP port " << port_number << " - CTRL+C to exit." << endl;
 
 		struct sockaddr_in my_addr;
@@ -264,8 +260,6 @@ int main(int argc, char **argv)
 
 			if (SOCKET_ERROR == (temp_bytes_received = recv(accept_socket, rx_buf, rx_buf_size, 0)))
 			{
-				cout << WSAGetLastError() << endl;
-
 				if (!stop)
 				{
 					cout << "  recv error." << endl;
