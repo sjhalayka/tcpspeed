@@ -188,7 +188,7 @@ int main(int argc, char **argv)
 		{
 			cout << "  Connect error." << endl;
 			cleanup();
-			return 3;
+			return 4;
 		}
 
 		while (!stop)
@@ -217,21 +217,21 @@ int main(int argc, char **argv)
 		{
 			cout << "  Could not allocate a new socket." << endl;
 			cleanup();
-			return 4;
+			return 5;
 		}
 
 		if (SOCKET_ERROR == bind(tcp_socket, (struct sockaddr *) &my_addr, sizeof(struct sockaddr)))
 		{
 			cout << "  Could not bind socket to port " << port_number << "." << endl;
 			cleanup();
-			return 5;
+			return 6;
 		}
 
 		if (SOCKET_ERROR == listen(tcp_socket, 0))
 		{
 			cout << "  Listen error." << endl;
 			cleanup();
-			return 6;
+			return 7;
 		}
 
 		SOCKET accept_socket = INVALID_SOCKET;
@@ -240,7 +240,7 @@ int main(int argc, char **argv)
 		{
 			cout << "  Accept error." << endl;
 			cleanup();
-			return 7;
+			return 8;
 		}
 
 		long unsigned int start_loop_ticks = 0;
@@ -265,7 +265,7 @@ int main(int argc, char **argv)
 				{
 					cout << "  Receive error." << endl;
 					cleanup();
-					return 6;
+					return 9;
 				}
 			}
 			else
@@ -304,7 +304,7 @@ int main(int argc, char **argv)
 					{
 						cout << "  Connection throttled to death." << endl;
 						cleanup();
-						return 7;
+						return 10;
 					}
 				}
 			}
