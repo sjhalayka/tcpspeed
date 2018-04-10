@@ -1,3 +1,3 @@
 # tcpspeed
 
-Public domain.
+Public domain. Line speed tester.
