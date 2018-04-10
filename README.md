@@ -1,1 +1,3 @@
 # tcpspeed
+
+Public domain.
