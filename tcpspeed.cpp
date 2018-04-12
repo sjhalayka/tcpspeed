@@ -225,7 +225,7 @@ int main(int argc, char **argv)
 		my_addr.sin_addr.s_addr = INADDR_ANY;
 		memset(&(my_addr.sin_zero), '\0', 8);
 
-		if (INVALID_SOCKET == (tcp_socket = socket(AF_INET, SOCK_STREAM, 0)))
+		if (INVALID_SOCKET == (tcp_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)))
 		{
 			cout << "  Could not allocate a new socket." << endl;
 			cleanup();
