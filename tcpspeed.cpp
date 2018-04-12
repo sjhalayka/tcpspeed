@@ -246,13 +246,26 @@ int main(int argc, char **argv)
 			return 7;
 		}
 
-		SOCKET accept_socket = INVALID_SOCKET;
-
-		if (INVALID_SOCKET == (accept_socket = accept(tcp_socket, (struct sockaddr *) &my_addr, &sock_addr_len)))
+		unsigned long int nb = 1;
+		if (SOCKET_ERROR == ioctlsocket(tcp_socket, FIONBIO, &nb))
 		{
-			cout << "  Accept error." << endl;
+			cout << "  Setting non-blocking mode failed." << endl;
 			cleanup();
 			return 8;
+		}
+
+		SOCKET accept_socket = INVALID_SOCKET;
+
+		while (INVALID_SOCKET == (accept_socket = accept(tcp_socket, (struct sockaddr *) &my_addr, &sock_addr_len)))
+		{
+			if (WSAEWOULDBLOCK == WSAGetLastError())
+				continue;
+			else
+			{
+				cout << "  Accept error." << endl;
+				cleanup();
+				return 9;
+			}
 		}
 
 		long unsigned int start_loop_ticks = 0;
@@ -273,18 +286,17 @@ int main(int argc, char **argv)
 
 			if (SOCKET_ERROR == (temp_bytes_received = recv(accept_socket, rx_buf, rx_buf_size, 0)))
 			{
-				if (!stop)
+				if (WSAEWOULDBLOCK != WSAGetLastError() && !stop)
 				{
 					cout << "  Receive error." << endl;
 					cleanup();
-					return 9;
+					return 10;
 				}
 			}
 			else
 			{
 				total_bytes_received += temp_bytes_received;
 			}
-
 
 			end_loop_ticks = GetTickCount();
 
