@@ -246,7 +246,7 @@ int main(int argc, char **argv)
 			return 7;
 		}
 
-		unsigned long int nb = 1;
+		long unsigned int nb = 1;
 		if (SOCKET_ERROR == ioctlsocket(tcp_socket, FIONBIO, &nb))
 		{
 			cout << "  Setting non-blocking mode failed." << endl;
