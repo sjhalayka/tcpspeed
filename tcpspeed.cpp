@@ -326,7 +326,7 @@ int main(int argc, char **argv)
 					{
 						cout << "  Connection throttled to death." << endl;
 						cleanup();
-						return 10;
+						return 11;
 					}
 				}
 			}
