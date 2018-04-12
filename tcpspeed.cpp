@@ -258,9 +258,7 @@ int main(int argc, char **argv)
 
 		while (INVALID_SOCKET == (accept_socket = accept(tcp_socket, (struct sockaddr *) &my_addr, &sock_addr_len)))
 		{
-			if (WSAEWOULDBLOCK == WSAGetLastError())
-				continue;
-			else
+			if (WSAEWOULDBLOCK != WSAGetLastError())
 			{
 				cout << "  Accept error." << endl;
 				cleanup();
