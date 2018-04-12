@@ -144,7 +144,7 @@ void cleanup(void)
 
 int main(int argc, char **argv)
 {
-	cout << endl << "tcpspeed 1.1 - TCP speed tester" << endl << "Copyright 2018, Shawn Halayka" << endl << endl;
+	cout << endl << "tcpspeed 1.2 - TCP speed tester" << endl << "Copyright 2018, Shawn Halayka" << endl << endl;
 
 	program_mode mode = listen_mode;
 	string target_host_string = "";
@@ -170,9 +170,9 @@ int main(int argc, char **argv)
 
 		memset(&hints, 0, sizeof(struct addrinfo));
 		hints.ai_family = AF_INET;
-		hints.ai_socktype = SOCK_DGRAM;
+		hints.ai_socktype = SOCK_STREAM;
 		hints.ai_flags = 0;
-		hints.ai_protocol = IPPROTO_UDP;
+		hints.ai_protocol = IPPROTO_TCP;
 
 		ostringstream oss;
 		oss << port_number;
@@ -185,7 +185,7 @@ int main(int argc, char **argv)
 			return 2;
 		}
 
-		if (INVALID_SOCKET == (tcp_socket = socket(AF_INET, SOCK_STREAM, 0)))
+		if (INVALID_SOCKET == (tcp_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)))
 		{
 			cout << "  Could not allocate a new socket." << endl;
 			freeaddrinfo(result);
