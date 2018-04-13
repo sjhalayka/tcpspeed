@@ -201,14 +201,24 @@ int main(int argc, char **argv)
 			return 4;
 		}
 
+		long unsigned int nb = 1;
+		if (SOCKET_ERROR == ioctlsocket(tcp_socket, FIONBIO, &nb))
+		{
+			cout << "  Setting non-blocking mode failed." << endl;
+			cleanup();
+			return 8;
+		}
+
 		while (!stop)
 		{
 			if (SOCKET_ERROR == (send(tcp_socket, tx_buf, tx_buf_size, 0)))
 			{
-				if (!stop)
+				if (WSAEWOULDBLOCK != WSAGetLastError() && !stop)
+				{
 					cout << "  Send error." << endl;
-
-				break;
+					cleanup();
+					return 10;
+				}
 			}
 		}
 
