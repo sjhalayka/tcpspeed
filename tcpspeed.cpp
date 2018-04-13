@@ -206,7 +206,7 @@ int main(int argc, char **argv)
 		{
 			cout << "  Setting non-blocking mode failed." << endl;
 			cleanup();
-			return 8;
+			return 5;
 		}
 
 		while (!stop)
@@ -217,7 +217,7 @@ int main(int argc, char **argv)
 				{
 					cout << "  Send error." << endl;
 					cleanup();
-					return 10;
+					return 6;
 				}
 			}
 		}
@@ -239,21 +239,21 @@ int main(int argc, char **argv)
 		{
 			cout << "  Could not allocate a new socket." << endl;
 			cleanup();
-			return 5;
+			return 7;
 		}
 
 		if (SOCKET_ERROR == bind(tcp_socket, (struct sockaddr *) &my_addr, sizeof(struct sockaddr)))
 		{
 			cout << "  Could not bind socket to port " << port_number << "." << endl;
 			cleanup();
-			return 6;
+			return 8;
 		}
 
 		if (SOCKET_ERROR == listen(tcp_socket, 0))
 		{
 			cout << "  Listen error." << endl;
 			cleanup();
-			return 7;
+			return 9;
 		}
 
 		long unsigned int nb = 1;
@@ -261,7 +261,7 @@ int main(int argc, char **argv)
 		{
 			cout << "  Setting non-blocking mode failed." << endl;
 			cleanup();
-			return 8;
+			return 10;
 		}
 
 		SOCKET accept_socket = INVALID_SOCKET;
@@ -272,7 +272,7 @@ int main(int argc, char **argv)
 			{
 				cout << "  Accept error." << endl;
 				cleanup();
-				return 9;
+				return 11;
 			}
 		}
 
@@ -298,7 +298,7 @@ int main(int argc, char **argv)
 				{
 					cout << "  Receive error." << endl;
 					cleanup();
-					return 10;
+					return 12;
 				}
 			}
 			else
@@ -336,7 +336,7 @@ int main(int argc, char **argv)
 					{
 						cout << "  Connection throttled to death." << endl;
 						cleanup();
-						return 11;
+						return 13;
 					}
 				}
 			}
